@@ -14,15 +14,17 @@ def get_jobs_API():
 
 def output_json_in_xls(data):
     workbook = xl.Workbook()
-    job_sheet = workbook.add_sheet("Jobs")
+    job_sheet = workbook.add_sheet("Jobs_2")
     headers = list(data[0].keys())
     # print(headers)
     for i in range(len(headers)):
         job_sheet.write(0, i, headers[i])
 
     for i in range(len(data)):
-        for j in range(len(headers)):
-            job_sheet.write(i+1, j, data[i][headers[j]])
+        jobs = data[i]
+        values = list(jobs.values())
+        for j in range(len(values)):
+            job_sheet.write(i+1, j, values[j])
     
     workbook.save("jobs.xls")
 
