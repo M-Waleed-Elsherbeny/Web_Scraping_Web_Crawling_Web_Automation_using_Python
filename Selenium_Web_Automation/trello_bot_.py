@@ -34,16 +34,39 @@ def login(DRIVER: webdriver.Chrome):
     time.sleep(5)
     # DRIVER.implicitly_wait(5)
 
-def create_new_board(DRIVER: webdriver.Chrome):
-    pass
+def navigateToBoard(DRIVER: webdriver.Chrome):
+    time.sleep(5)
+    DRIVER.execute_script("window.scrollTo(0, document.body.scrollHeight);") # to scroll to the bottom of the page.
+    time.sleep(2)
+    DRIVER.find_element(By.XPATH, '//span[@class="GOPk_J9hMP7py5"]').click()
+
+def addTask(DRIVER: webdriver.Chrome):
+    time.sleep(5)
+    DRIVER.find_element(By.CSS_SELECTOR, 'button[aria-label="Add a card in Today"]').click()
+    time.sleep(2)
+    addCard = DRIVER.find_element(By.CSS_SELECTOR, 'textarea[placeholder="Enter a title or paste a link"]')
+    addCard.clear()
+    addCard.send_keys("Add Task From Python Script")
+    addCard.send_keys(Keys.ENTER)
+    DRIVER.find_element(By.CSS_SELECTOR, 'button[aria-label="Cancel new card"]').click()
+    time.sleep(2)
+
+def takeScreenShot(DRIVER: webdriver.Chrome):
+    fileName = date.today().strftime("%d-%m-%Y")
+    DRIVER.save_screenshot(f"Selenium_Web_Automation/Add_Task_Image/{fileName}.png")
+    
 def main():
     try:
         DRIVER.get(BASE_URL)
         DRIVER.maximize_window()
         login(DRIVER=DRIVER)
-        create_new_board(DRIVER=DRIVER)
+        navigateToBoard(DRIVER=DRIVER)
+        addTask(DRIVER=DRIVER)
+        takeScreenShot(DRIVER=DRIVER)
     except Exception as e:
         print(e)
+        DRIVER.close()
+    finally:
         DRIVER.close()
 
 
